@@ -18,42 +18,45 @@ public class ArenaSetup implements CommandExecutor {
 
         Player player = (Player) sender;
 
-        if (args.length >= 3) {
-            String subCommand = args[0];
-            String arenaName = args[1];
+        if (args.length < 1) {
+            // Handle command usage or provide help here
+            return true;
+        }
 
-            if (subCommand.equalsIgnoreCase("create")) {
+        String subCommand = args[0];
+
+        if (subCommand.equalsIgnoreCase("create")) {
+            if (args.length >= 3) {
                 String mapName = args[2];
+                String arenaName = args[1];
                 SetConfig.createArenaConfig(arenaName, mapName);
                 SetArenaList.addArena(arenaName);
 
                 player.sendMessage("Arena " + arenaName + " created successfully.");
                 return true;
-            } else if (subCommand.equalsIgnoreCase("setpos1")) {
-                if (args.length < 3) {
-                    player.sendMessage("Usage: /bp setpos1 <ArenaName>");
-                    return true;
-                }
-
-                Location location = player.getLocation();
-                float yaw = player.getLocation().getYaw();
-                float pitch = player.getLocation().getPitch();
-                SetConfig.setPos1(arenaName, location, yaw, pitch);
-                player.sendMessage("Position 1 set for arena " + arenaName);
-                return true;
-            } else if (subCommand.equalsIgnoreCase("setpos2")) {
-                if (args.length < 3) {
-                    player.sendMessage("Usage: /bp setpos2 <ArenaName>");
-                    return true;
-                }
-
-                Location location = player.getLocation();
-                float yaw = player.getLocation().getYaw();
-                float pitch = player.getLocation().getPitch();
-                SetConfig.setPos2(arenaName, location, yaw, pitch);
-                player.sendMessage("Position 2 set for arena " + arenaName);
+            } else {
+                player.sendMessage("Usage: /bp create <ArenaName> <MapName>");
                 return true;
             }
+        }
+
+        if (subCommand.equalsIgnoreCase("setpos1")) {
+            handleSetPos(player, args, 1);
+            return true;
+        }
+
+        if (subCommand.equalsIgnoreCase("setpos2")) {
+            handleSetPos(player, args, 2);
+            return true;
+        }
+
+        if (subCommand.equalsIgnoreCase("setlobby")) {
+            Location location = player.getLocation();
+            float yaw = player.getLocation().getYaw();
+            float pitch = player.getLocation().getPitch();
+            com.njdge.botpractice.Lobby.SetConfig.setLobby(location, yaw, pitch);
+            player.sendMessage("Lobby location set.");
+            return true;
         }
 
         if (args.length == 1 && args[0].equalsIgnoreCase("setlobby")) {
@@ -66,4 +69,31 @@ public class ArenaSetup implements CommandExecutor {
         }
         return true;
     }
+
+
+    private void handleSetPos(Player player, String[] args, int posNumber) {
+        if (args.length < 2) {
+            player.sendMessage("Usage: /bp setpos" + posNumber + " <ArenaName>");
+            return;
+        }
+
+        String arenaName = args[1];
+
+        Location location = player.getLocation();
+        float yaw = player.getLocation().getYaw();
+        float pitch = player.getLocation().getPitch();
+
+        if (posNumber == 1) {
+            SetConfig.setPos1(arenaName, location, yaw, pitch);
+            player.sendMessage("Position 1 set for arena " + arenaName);
+        } else if (posNumber == 2) {
+            SetConfig.setPos2(arenaName, location, yaw, pitch);
+            player.sendMessage("Position 2 set for arena " + arenaName);
+        }
+    }
+
+
+
+
 }
+

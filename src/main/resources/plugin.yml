@@ -1,9 +1,9 @@
 name: BotPractice
 version: '${project.version}'
-main: com.njdge.botpractice.BotPractice
+main: com.njdge.botpractice.Main
 api-version: '1.8.8'
 commands:
-  botpractice:
+  bp:
     description: start a game
     usage: /bp <value>
     aliases: [ bp ]
