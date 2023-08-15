@@ -1,0 +1,13 @@
+name: BotPractice
+version: '${project.version}'
+main: com.njdge.botpractice.BotPractice
+api-version: '1.8.8'
+commands:
+  botpractice:
+    description: start a game
+    usage: /bp <value>
+    aliases: [ bp ]
+  mw:
+    description: start a game
+    usage: /mw tp <world>
+    aliases: [ multiworld ]
