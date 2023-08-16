@@ -14,6 +14,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -99,16 +100,16 @@ public class BoxingManager {
 
             Location botSpawnLocation = new Location(world, x, y, z, yaw, pitch);
 
-            NPC npc = npcRegistry.createNPC(EntityType.PLAYER, "Random");
+            NPC npc = npcRegistry.createNPC(EntityType.PLAYER, "louehoi");
             double playerSpeed = player.getWalkSpeed();
-
             npc.spawn(botSpawnLocation);
             npc.setProtected(false);
             npc.getEntity().setVelocity(player.getLocation().getDirection().multiply(playerSpeed));
             npc.setUseMinecraftAI(false);  // 禁用Minecraft AI
             npc.faceLocation(player.getLocation());
-            ItemStack diamondSword = new ItemStack(Material.DIAMOND_SWORD);
-            npc.getTrait(Equipment.class).set(Equipment.EquipmentSlot.HAND, diamondSword);
+            ItemStack sharpDiamondSword = new ItemStack(Material.DIAMOND_SWORD);
+            sharpDiamondSword.addEnchantment(Enchantment.DAMAGE_ALL, 5);
+            npc.getTrait(Equipment.class).set(Equipment.EquipmentSlot.HAND, sharpDiamondSword);
 
             Bukkit.getScheduler().runTaskTimer(Main.instance, () -> {
                 npc.getNavigator().setTarget(player, true);  // 设置导航目标
@@ -118,7 +119,5 @@ public class BoxingManager {
 
             }, 0L, 20L); // 每隔一秒（20个游戏刻）更新一次导航目标
         }
-
-
     }
 }
