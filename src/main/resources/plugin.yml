@@ -14,4 +14,7 @@ commands:
   duel:
     description: start a game
     usage: /duel
+  k:
+    description: start a game
+    usage: /k
 depend: [Citizens]

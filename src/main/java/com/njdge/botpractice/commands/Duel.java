@@ -27,9 +27,9 @@ public class Duel implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("duel") && sender instanceof Player) {
             if (args.length == 0) {
                 boxingManager.spawnBot(player, "cave");
-                boxingManager.resetAllHits();
                 boxingManager.teleportToArena(player, "cave");
-                boxingManager.npcHit(player);
+                boxingManager.playerHits.clear();
+                boxingManager.botHits = 0;
 
                 return true;
             }

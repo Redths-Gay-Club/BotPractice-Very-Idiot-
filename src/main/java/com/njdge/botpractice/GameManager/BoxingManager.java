@@ -1,12 +1,16 @@
 package com.njdge.botpractice.GameManager;
 
-import com.njdge.botpractice.Arena.SetConfig;
 import com.njdge.botpractice.Main;
 import net.citizensnpcs.api.CitizensAPI;
+import net.citizensnpcs.api.ai.NavigatorParameters;
+import net.citizensnpcs.api.event.NPCDamageByEntityEvent;
+import net.citizensnpcs.api.event.NPCKnockbackEvent;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.npc.NPCRegistry;
+import net.citizensnpcs.api.trait.trait.Equipment;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -14,14 +18,23 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Map;
 
 public class BoxingManager {
 
-    private final HashMap<Player, Integer> hits = new HashMap<>();
     private final NPCRegistry npcRegistry;
+    public final Map<Player, Integer> playerHits = new HashMap<>();
+    public int botHits = 0;
+
     private final int targetHits;
 
     public BoxingManager(NPCRegistry npcRegistry, int targetHits) {
@@ -29,37 +42,28 @@ public class BoxingManager {
         this.targetHits = targetHits;
     }
 
-
-    public void addHit(Player player) {
-        if (hits.containsKey(player)) {
-            int currentHits = hits.get(player) + 1;
-            hits.put(player, currentHits);
-
-            if (currentHits >= targetHits) {
-                // 玩家达到目标击打次数，玩家获胜逻辑
-                // 例如：结束游戏，显示获胜信息等
-            }
-        } else {
-            hits.put(player, 1);
+    @EventHandler
+    public void onEntityDamageByPlayer(EntityDamageByEntityEvent event) {
+        if (event.getDamager() instanceof Player) {
+            Player player = (Player) event.getDamager();
+            playerHits.put(player, playerHits.getOrDefault(player, 0) + 1);
         }
     }
 
-    public int getHits(Player player) {
-        return hits.getOrDefault(player, 0);
+    @EventHandler
+    public void onNPCDamageByEntity(NPCDamageByEntityEvent event) {
+        if (CitizensAPI.getNPCRegistry().isNPC(event.getDamager())) {
+            botHits++;
+        }
     }
 
-    public void resetHits(Player player) {
-        hits.remove(player);
+    public int getPlayerHits(Player player) {
+        return playerHits.getOrDefault(player, 0);
     }
 
-    public void resetAllHits() {
-        hits.clear();
+    public int getBotHits() {
+        return botHits;
     }
-
-    public void npcHit(Player player) {
-        addHit(player); // 将被NPC打到的玩家的Hit次数加1
-    }
-
 
 
     public void teleportToArena(Player player, String arenaName) {
@@ -83,10 +87,10 @@ public class BoxingManager {
 
     public void spawnBot(Player player, String arenaName) {
         File configFile = new File(Main.instance.getDataFolder(), arenaName + ".yml");
-
         FileConfiguration arenaConfig = YamlConfiguration.loadConfiguration(configFile);
+
         if (arenaConfig != null) {
-            World world = Bukkit.getWorld(arenaConfig.getString("MapName"));
+            World world = Bukkit.getWorld("cave");
             double x = arenaConfig.getDouble("Pos2.X");
             double y = arenaConfig.getDouble("Pos2.Y");
             double z = arenaConfig.getDouble("Pos2.Z");
@@ -95,30 +99,26 @@ public class BoxingManager {
 
             Location botSpawnLocation = new Location(world, x, y, z, yaw, pitch);
 
-            NPCRegistry registry = CitizensAPI.getNPCRegistry();
-            NPC npc = registry.createNPC(EntityType.PLAYER, "Random");
+            NPC npc = npcRegistry.createNPC(EntityType.PLAYER, "Random");
+            double playerSpeed = player.getWalkSpeed();
+
             npc.spawn(botSpawnLocation);
             npc.setProtected(false);
+            npc.getEntity().setVelocity(player.getLocation().getDirection().multiply(playerSpeed));
+            npc.setUseMinecraftAI(false);  // 禁用Minecraft AI
+            npc.faceLocation(player.getLocation());
+            ItemStack diamondSword = new ItemStack(Material.DIAMOND_SWORD);
+            npc.getTrait(Equipment.class).set(Equipment.EquipmentSlot.HAND, diamondSword);
 
-            ArmorStand dummyEntity = (ArmorStand) botSpawnLocation.getWorld().spawnEntity(botSpawnLocation, EntityType.ARMOR_STAND);
-            dummyEntity.setGravity(false);
-            Bukkit.getScheduler().runTaskLater(Main.instance, () -> {
-                npc.getNavigator().setTarget(dummyEntity, true);  // 设置导航目标
-                dummyEntity.remove();
-            }, 20L);
-        } else {
-            player.sendMessage("Arena configuration not found.");
+            Bukkit.getScheduler().runTaskTimer(Main.instance, () -> {
+                npc.getNavigator().setTarget(player, true);  // 设置导航目标
+                NavigatorParameters navParams = npc.getNavigator().getDefaultParameters();
+
+                navParams.speedModifier(1.8F); // 设置导航速度为1.8
+
+            }, 0L, 20L); // 每隔一秒（20个游戏刻）更新一次导航目标
         }
+
+
     }
-
-
-
-    public void spawnDummyEntity(Location location) {
-        ArmorStand dummy = (ArmorStand) location.getWorld().spawnEntity(location, EntityType.ARMOR_STAND);
-        dummy.setGravity(false);
-        dummy.setVisible(false);
-        dummy.setMarker(true); // This makes the ArmorStand invisible and immobile
-    }
-
-
 }
