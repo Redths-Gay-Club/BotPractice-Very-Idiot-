@@ -19,8 +19,8 @@ public class Damage implements Listener {
     public void onEntityDamage(EntityDamageEvent event) {
         if (event.getEntity() instanceof Player) {
             event.setCancelled(true);
-            event.setDamage(0);
             Player player = (Player) event.getEntity();
+            player.damage(0);
 
         }
     }
@@ -37,8 +37,7 @@ public class Damage implements Listener {
                     Location victimLocation = victim.getLocation();
                     Location attackerLocation = attacker.getLocation();
                     double knockbackStrength = 0.8D; // 设置击退强度
-                    double verticalKnockback = 0.3;  // 设置垂直击退强度
-                    attacker.playSound(attacker.getLocation(), Sound.HURT_FLESH, 1.0F, 1.0F);
+                    double verticalKnockback = 0.3;  // 设置垂直击退强度s
 
 
                     // 计算从玩家到NPC的方向向量
@@ -67,13 +66,9 @@ public class Damage implements Listener {
 
             if (npc != null && player != null) {
                 if (!isAttackedRecently(npc)) {
-                    // 在这里执行对NPC被攻击的逻辑
-                    // 例如增加玩家的击打次数等
 
-                    // 标记NPC已被攻击
                     markAttacked(npc);
 
-                    // 取消伤害
                     event.setCancelled(true);
                 }
             }
