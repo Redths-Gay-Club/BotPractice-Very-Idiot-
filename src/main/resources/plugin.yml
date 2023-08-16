@@ -11,3 +11,7 @@ commands:
     description: start a game
     usage: /mw tp <world>
     aliases: [ multiworld ]
+  duel:
+    description: start a game
+    usage: /duel
+depend: [Citizens]
