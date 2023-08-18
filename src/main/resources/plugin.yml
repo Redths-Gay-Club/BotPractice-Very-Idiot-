@@ -17,4 +17,7 @@ commands:
   k:
     description: start a game
     usage: /k
+  l:
+    description: start a game
+    usage: /l
 depend: [Citizens]

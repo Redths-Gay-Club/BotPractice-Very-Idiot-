@@ -3,6 +3,7 @@ package com.njdge.botpractice.Lobby;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,9 +23,9 @@ public class SetConfig {
         }
     }
 
-    public static void setLobby(Location location, float yaw, float pitch) {
+    public static <player> void setLobby(Location location, float yaw, float pitch, Player player ) {
         FileConfiguration config = getLobbyConfig();
-        config.set("lobby.world", location.getWorld());
+        config.set("lobby.world", player.getWorld().getName());
         config.set("lobby.x", location.getX());
         config.set("lobby.y", location.getY());
         config.set("lobby.z", location.getZ());

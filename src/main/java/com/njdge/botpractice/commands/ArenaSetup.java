@@ -53,7 +53,7 @@ public class ArenaSetup implements CommandExecutor {
             Location location = player.getLocation();
             float yaw = player.getLocation().getYaw();
             float pitch = player.getLocation().getPitch();
-            com.njdge.botpractice.Lobby.SetConfig.setLobby(location, yaw, pitch);
+            com.njdge.botpractice.Lobby.SetConfig.setLobby(location, yaw, pitch, player);
             player.sendMessage("Lobby location set.");
             return true;
         }
@@ -62,7 +62,7 @@ public class ArenaSetup implements CommandExecutor {
             Location location = player.getLocation();
             float yaw = player.getLocation().getYaw();
             float pitch = player.getLocation().getPitch();
-            com.njdge.botpractice.Lobby.SetConfig.setLobby(location, yaw, pitch);
+            com.njdge.botpractice.Lobby.SetConfig.setLobby(location, yaw, pitch, player);
             player.sendMessage("Lobby location set.");
             return true;
         }

@@ -5,9 +5,11 @@ import com.njdge.botpractice.GameManager.BoxingManager;
 import com.njdge.botpractice.Listener.Damage;
 import com.njdge.botpractice.Listener.HitEvent;
 import com.njdge.botpractice.Listener.core;
+import com.njdge.botpractice.Listener.onPlayerJoin;
 import com.njdge.botpractice.MultiWorld.MultiWorld;
 import com.njdge.botpractice.commands.ArenaSetup;
 import com.njdge.botpractice.commands.Duel;
+import com.njdge.botpractice.commands.L;
 import com.njdge.botpractice.commands.kill;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPCRegistry;
@@ -45,6 +47,10 @@ public final class Main extends JavaPlugin {
         Bukkit.getPluginCommand("duel").setExecutor(new Duel(boxingManager));
         selMap = new SelMap(boxingManager);
         Bukkit.getPluginManager().registerEvents(selMap, this);
+        Bukkit.getPluginCommand("l").setExecutor(new L());
+        Bukkit.getPluginManager().registerEvents(new onPlayerJoin(), this);
+
+
     }
 
     @Override

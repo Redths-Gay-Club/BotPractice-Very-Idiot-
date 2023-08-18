@@ -12,9 +12,8 @@ import static com.njdge.botpractice.MultiWorld.MultiWorld.teleportToLobby;
 public class onPlayerJoin implements Listener {
 
     @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event) {
+    public void onPlayerJoinEvent(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         teleportToLobby(player);
     }
-
 }
