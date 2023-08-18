@@ -19,7 +19,6 @@ public class ArenaSetup implements CommandExecutor {
         Player player = (Player) sender;
 
         if (args.length < 1) {
-            // Handle command usage or provide help here
             return true;
         }
 

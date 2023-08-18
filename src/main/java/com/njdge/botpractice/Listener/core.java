@@ -13,15 +13,13 @@ public class core implements Listener {
     public void onCreatureSpawn(CreatureSpawnEvent event) {
         if (event.getSpawnReason() ==
                 CreatureSpawnEvent.SpawnReason.NATURAL) {
-            // 禁止自然生成的怪物和动物
             event.setCancelled(true);
         }
     }
     @EventHandler
-    public void onBlockBreak(BlockBreakEvent event) {  //禁止破壞
+    public void onBlockBreak(BlockBreakEvent event) {
 
         if (event.getPlayer().getGameMode() != GameMode.CREATIVE) {
-            // 取消破壞事件
             Player player = event.getPlayer();
             player.sendMessage("§c您不可以破壞方塊");
 

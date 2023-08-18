@@ -24,7 +24,7 @@ public class SetConfig {
 
     public static void setLobby(Location location, float yaw, float pitch) {
         FileConfiguration config = getLobbyConfig();
-
+        config.set("lobby.world", location.getWorld());
         config.set("lobby.x", location.getX());
         config.set("lobby.y", location.getY());
         config.set("lobby.z", location.getZ());

@@ -31,8 +31,8 @@ public class MultiWorld implements CommandExecutor {
             }
             if (args.length >= 2 && args[0].equalsIgnoreCase("tp")) {
                 String mapFolderName = args[1];
-                importMap(mapFolderName); // 先导入地图
-                teleportToMap(player, mapFolderName); // 再传送玩家
+                importMap(mapFolderName);
+                teleportToMap(player, mapFolderName);
                 return true;
             }
             if (args.length >= 2 && args[0].equalsIgnoreCase("import")) {
@@ -101,7 +101,6 @@ public class MultiWorld implements CommandExecutor {
 
     public static void importMap(String mapFolderName) {
         loadMaps(mapFolderName);
-        // 获取服务器的地图文件夹路径
 
     }
     public static void SaveMap(String mapFolderName) {
@@ -120,7 +119,6 @@ public class MultiWorld implements CommandExecutor {
             }
         }
 
-        // 创建目标 Maps 文件夹（如果不存在）
         if (!destinationMapsFolder.exists()) {
             destinationMapsFolder.mkdirs();
         }
@@ -136,7 +134,7 @@ public class MultiWorld implements CommandExecutor {
     }
 
     public static void DelMap(String mapFolderName) {
-        UnloadWorld(mapFolderName);  // 先取消載入世界
+        UnloadWorld(mapFolderName);
         File destinationMapFolder = new File(mapFolderName);
 
         if (destinationMapFolder.exists() && destinationMapFolder.isDirectory()) {
@@ -158,10 +156,8 @@ public class MultiWorld implements CommandExecutor {
         File mapFolder = new File(mapFolderPath);
 
         if (mapFolder.exists() && mapFolder.isDirectory()) {
-            // 步骤 1：复制地图文件夹到服务器世界文件夹中
             loadMaps(mapFolderName);
 
-            // 步骤 2：加载已复制的世界
             World world = Bukkit.createWorld(new org.bukkit.WorldCreator(mapFolderName));
             if (world != null) {
                 player.teleport(world.getSpawnLocation());
@@ -173,20 +169,14 @@ public class MultiWorld implements CommandExecutor {
             player.sendMessage("Map not found: " + mapFolderName);
         }
     }
-
-
-
-    private void teleportToLobby(Player player) {
-        File configFile = new File(Main.instance.getDataFolder(), "lobby.config");
+    public static void teleportToLobby(Player player) {
+        File configFile = new File(Main.instance.getDataFolder(), "lobby.yml");
         FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
-
         String worldName = config.getString("lobby.world");
         double x = config.getDouble("lobby.x");
         double y = config.getDouble("lobby.y");
         double z = config.getDouble("lobby.z");
-
         World world = Bukkit.getWorld(worldName);
-
         if (world != null) {
             Location lobbyLocation = new Location(world, x, y, z);
             player.teleport(lobbyLocation);

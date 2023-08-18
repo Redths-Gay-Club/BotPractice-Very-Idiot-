@@ -7,19 +7,17 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class kill implements CommandExecutor {
+import static com.njdge.botpractice.MultiWorld.MultiWorld.teleportToLobby;
+
+public class L implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (cmd.getName().equalsIgnoreCase("k")) {
+        if (cmd.getName().equalsIgnoreCase("l")) {
             if (sender instanceof Player) {
                 Player player = (Player) sender;
-                for (NPC npc : CitizensAPI.getNPCRegistry()) {
-                    npc.destroy();
-                }
-                player.sendMessage("所有NPC已删除！");
+                teleportToLobby(player);
             }
         }
         return true;
     }
-
 }

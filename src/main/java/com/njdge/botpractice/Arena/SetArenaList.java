@@ -37,10 +37,8 @@ public class SetArenaList {
     }
 
     public static List<String> getArenaNames() {
-        // 获取 ArenaList 配置文件
-        FileConfiguration arenaListConfig = plugin.getConfig(); // 使用静态字段
+        FileConfiguration arenaListConfig = plugin.getConfig();
 
-        // 获取 ArenaList 下的配置部分
         ConfigurationSection arenaListSection = arenaListConfig.getConfigurationSection("ArenaList");
 
         if (arenaListSection != null) {
@@ -53,10 +51,10 @@ public class SetArenaList {
     }
 
 
-        private static Plugin plugin; // 设置为静态
+        private static Plugin plugin;
 
         public SetArenaList(Plugin plugin) {
-            SetArenaList.plugin = plugin; // 设置插件实例
+            SetArenaList.plugin = plugin;
         }
 
 
