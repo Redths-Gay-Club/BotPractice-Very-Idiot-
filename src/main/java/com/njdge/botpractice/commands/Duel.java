@@ -24,8 +24,12 @@ public class Duel implements CommandExecutor {
         Player player = (Player) sender;
         if (command.getName().equalsIgnoreCase("duel")) {
             if (args.length == 0) {
-                SelMap.openGUI(player);
-                return true;
+                if(BotName.getBotName() != null) {
+                    SelMap.openGUI(player);
+                    return true;
+                }else{
+                    player.sendMessage("§c請先設定機器人名稱/botname <name>");
+                }
             }
         }
         return false;

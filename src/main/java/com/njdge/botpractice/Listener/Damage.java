@@ -19,6 +19,8 @@ import java.util.Map;
 import static com.njdge.botpractice.GameManager.BoxingManager.botHits;
 
 public class Damage implements Listener {
+    private final Map<NPC, Long> lastAttackTimeMap = new HashMap<>();
+
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
         if (event.getEntity() instanceof Player) {
@@ -28,27 +30,37 @@ public class Damage implements Listener {
 
         }
     }
-    @EventHandler
 
-    public void onDamage(EntityDamageByEntityEvent e) {
-        if (e.getDamager() instanceof Player) {
-            if (e.getEntity() instanceof Player) {
+        @EventHandler
+        public void onDamage(EntityDamageByEntityEvent e) {
+            if (e.getDamager() instanceof Player && e.getEntity() instanceof Player) {
                 final Player attacker = (Player) e.getDamager();
                 Player victim = (Player) e.getEntity();
+
                 if (victim.hasMetadata("NPC")) {
-                    botHits++;
-                    System.out.println(botHits);
-                    Location victimLocation = victim.getLocation();
-                    Location attackerLocation = attacker.getLocation();
-                    double knockbackStrength = 0.8D; // 擊退強度
-                    double verticalKnockback = 0.3;  // 垂直擊退
-                    Vector direction = victimLocation.clone().subtract(attackerLocation).toVector().normalize();
-                    Vector knockbackVector = direction.multiply(knockbackStrength).setY(verticalKnockback);
-                    victim.setVelocity(knockbackVector);
+                    NPC npc = CitizensAPI.getNPCRegistry().getNPC(victim);
+                    if (npc != null) {
+                        Location victimLocation = victim.getLocation();
+                        Location attackerLocation = attacker.getLocation();
+                        double knockbackStrength = 0.8D; // 擊退強度
+                        double verticalKnockback = 0.37;  // 垂直擊退
+                        Vector direction = victimLocation.clone().subtract(attackerLocation).toVector().normalize();
+                        Vector knockbackVector = direction.multiply(knockbackStrength).setY(verticalKnockback);
+
+                        if (!victim.isOnGround()) {
+                            double AirKnockbackStrength = 0.68D;
+                            double AirVerticalKnockback = 0.26;
+                            Vector Airdirection = victimLocation.clone().subtract(attackerLocation).toVector().normalize();
+                            Vector AirknockbackVector = direction.multiply(AirKnockbackStrength).setY(AirVerticalKnockback);
+                            victim.setVelocity(knockbackVector);
+
+                        }
+
+                        victim.setVelocity(knockbackVector);
+                    }
                 }
             }
         }
-    }
     @EventHandler
 
     public void onPlayerDamage(EntityDamageByEntityEvent e) {
@@ -60,10 +72,18 @@ public class Damage implements Listener {
                     Location victimLocation = victim.getLocation();
                     Location attackerLocation = attacker.getLocation();
                     double knockbackStrength = 0.8D;
-                    double verticalKnockback = 0.3;
+                    double verticalKnockback = 0.37;
                     Vector direction = victimLocation.clone().subtract(attackerLocation).toVector().normalize();
                     Vector knockbackVector = direction.multiply(knockbackStrength).setY(verticalKnockback);
                     victim.setVelocity(knockbackVector);
+                    if (!victim.isOnGround()) {
+                        double AirKnockbackStrength = 0.68D;
+                        double AirVerticalKnockback = 0.26;
+                        Vector Airdirection = victimLocation.clone().subtract(attackerLocation).toVector().normalize();
+                        Vector AirknockbackVector = direction.multiply(AirKnockbackStrength).setY(AirVerticalKnockback);
+                        victim.setVelocity(knockbackVector);
+
+                    }
                 }
             }
         }

@@ -3,6 +3,7 @@ package com.njdge.botpractice.GUI;
 import com.njdge.botpractice.Arena.SetArenaList;
 import com.njdge.botpractice.GameManager.BoxingManager;
 import com.njdge.botpractice.Main;
+import com.njdge.botpractice.commands.BotName;
 import net.citizensnpcs.api.ai.NavigatorParameters;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.trait.Equipment;
@@ -81,8 +82,12 @@ public class SelMap implements Listener {
                 if (clickedItem != null && clickedItem.getType() == Material.PAPER) {
                     String arenaName = clickedItem.getItemMeta().getDisplayName();
                     if (!playerInGame.containsKey(player) || !playerInGame.get(player)) {
-                        startGame(player, arenaName);
-                        playerInGame.put(player, true);
+                        if(BotName.getBotName() != null) {
+                            startGame(player, arenaName);
+                            playerInGame.put(player, true);
+                        }else{
+                            player.sendMessage("§c請先設定機器人名稱/botname <name>");
+                        }
                     }
                 }
             }
@@ -100,17 +105,17 @@ public class SelMap implements Listener {
                 World world = Bukkit.createWorld(new org.bukkit.WorldCreator(arenaName));
                 if (world != null) {
                     player.teleport(world.getSpawnLocation());
-                    player.sendMessage("You have been teleported to the map: " + arenaName);
+                    player.sendMessage("§eYou have been teleported to the map: " + arenaName);
                 } else {
-                    player.sendMessage("Failed to teleport to map: " + arenaName);
+                    player.sendMessage("§cFailed to teleport to map: " + arenaName);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                player.sendMessage("An error occurred while loading the map: " + arenaName);
+                player.sendMessage("§cAn error occurred while loading the map: " + arenaName);
                 return;
             }
         } else {
-            player.sendMessage("Map not found: " + arenaName);
+            player.sendMessage("§cMap not found: " + arenaName);
             return;
         }
 

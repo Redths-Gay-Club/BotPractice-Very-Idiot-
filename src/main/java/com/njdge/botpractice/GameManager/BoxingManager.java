@@ -1,6 +1,7 @@
 package com.njdge.botpractice.GameManager;
 
 import com.njdge.botpractice.Main;
+import com.njdge.botpractice.commands.BotName;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.ai.NavigatorParameters;
 import net.citizensnpcs.api.event.NPCDamageByEntityEvent;
@@ -57,6 +58,7 @@ public class BoxingManager {
     }
 
 
+
     public static void teleportToArena(Player player, String arenaName) {
         File configFile = new File(Main.instance.getDataFolder(), arenaName + ".yml");
         FileConfiguration arenaConfig = YamlConfiguration.loadConfiguration(configFile);
@@ -93,7 +95,8 @@ public class BoxingManager {
             npc.setProtected(false);
             npc.getEntity().setVelocity(player.getLocation().getDirection().multiply(playerSpeed));
             npc.faceLocation(player.getLocation());
-            npc.setName("bot");
+            npc.setName(BotName.getBotName());
+            npc.setUseMinecraftAI(true);
             if (botHits >= 100) {
                 npc.destroy();
             }

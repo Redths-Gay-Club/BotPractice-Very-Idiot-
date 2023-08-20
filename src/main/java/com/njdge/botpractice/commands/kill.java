@@ -16,7 +16,7 @@ public class kill implements CommandExecutor {
                 for (NPC npc : CitizensAPI.getNPCRegistry()) {
                     npc.destroy();
                 }
-                player.sendMessage("所有NPC已删除！");
+                player.sendMessage("§e所有NPC已删除！");
             }
         }
         return true;

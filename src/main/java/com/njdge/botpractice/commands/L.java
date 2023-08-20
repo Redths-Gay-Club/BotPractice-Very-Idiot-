@@ -6,6 +6,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.PlayerInventory;
 
 import static com.njdge.botpractice.MultiWorld.MultiWorld.teleportToLobby;
 
@@ -16,6 +17,8 @@ public class L implements CommandExecutor {
             if (sender instanceof Player) {
                 Player player = (Player) sender;
                 teleportToLobby(player);
+                PlayerInventory inventory = player.getInventory();
+                inventory.clear();
             }
         }
         return true;

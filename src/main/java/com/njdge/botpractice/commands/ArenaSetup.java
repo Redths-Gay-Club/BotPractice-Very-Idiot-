@@ -31,10 +31,10 @@ public class ArenaSetup implements CommandExecutor {
                 SetConfig.createArenaConfig(arenaName, mapName);
                 SetArenaList.addArena(arenaName);
 
-                player.sendMessage("Arena " + arenaName + " created successfully.");
+                player.sendMessage("§eArena " + arenaName + " created successfully.");
                 return true;
             } else {
-                player.sendMessage("Usage: /bp create <ArenaName> <MapName>");
+                player.sendMessage("§cUsage: /bp create <ArenaName> <MapName>");
                 return true;
             }
         }
@@ -54,7 +54,7 @@ public class ArenaSetup implements CommandExecutor {
             float yaw = player.getLocation().getYaw();
             float pitch = player.getLocation().getPitch();
             com.njdge.botpractice.Lobby.SetConfig.setLobby(location, yaw, pitch, player);
-            player.sendMessage("Lobby location set.");
+            player.sendMessage("§eLobby location set.");
             return true;
         }
 
@@ -63,7 +63,7 @@ public class ArenaSetup implements CommandExecutor {
             float yaw = player.getLocation().getYaw();
             float pitch = player.getLocation().getPitch();
             com.njdge.botpractice.Lobby.SetConfig.setLobby(location, yaw, pitch, player);
-            player.sendMessage("Lobby location set.");
+            player.sendMessage("§eLobby location set.");
             return true;
         }
         return true;
@@ -72,7 +72,7 @@ public class ArenaSetup implements CommandExecutor {
 
     private void handleSetPos(Player player, String[] args, int posNumber) {
         if (args.length < 2) {
-            player.sendMessage("Usage: /bp setpos" + posNumber + " <ArenaName>");
+            player.sendMessage("§cUsage: /bp setpos" + posNumber + " <ArenaName>");
             return;
         }
 
@@ -84,10 +84,10 @@ public class ArenaSetup implements CommandExecutor {
 
         if (posNumber == 1) {
             SetConfig.setPos1(arenaName, location, yaw, pitch);
-            player.sendMessage("Position 1 set for arena " + arenaName);
+            player.sendMessage("§ePosition 1 set for arena " + arenaName);
         } else if (posNumber == 2) {
             SetConfig.setPos2(arenaName, location, yaw, pitch);
-            player.sendMessage("Position 2 set for arena " + arenaName);
+            player.sendMessage("§ePosition 2 set for arena " + arenaName);
         }
     }
 

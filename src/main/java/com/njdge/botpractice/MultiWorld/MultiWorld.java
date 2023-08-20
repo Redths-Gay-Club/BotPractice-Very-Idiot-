@@ -85,16 +85,16 @@ public class MultiWorld implements CommandExecutor {
             if (!destinationFolder.exists()) {
                 try {
                     FileUtils.copyDirectory(mapFolder, destinationFolder);
-                    getLogger().info("Copied map: " + mapFolderName);
+                    getLogger().info("§eCopied map: " + mapFolderName);
                 } catch (IOException e) {
                     e.printStackTrace();
-                    getLogger().warning("Failed to copy map: " + mapFolderName);
+                    getLogger().warning("§cFailed to copy map: " + mapFolderName);
                 }
             } else {
-                getLogger().warning("Map already exists: " + mapFolderName);
+                getLogger().warning("§cMap already exists: " + mapFolderName);
             }
         } else {
-            getLogger().warning("Map not found: " + mapFolderName);
+            getLogger().warning("§cMap not found: " + mapFolderName);
         }
     }
 
@@ -114,7 +114,7 @@ public class MultiWorld implements CommandExecutor {
                 FileUtils.deleteDirectory(destinationMapFolder);
             } catch (IOException e) {
                 e.printStackTrace();
-                getLogger().warning("Failed to delete existing map folder: " + mapFolderName);
+                getLogger().warning("§cFailed to delete existing map folder: " + mapFolderName);
                 return;
             }
         }
@@ -126,10 +126,10 @@ public class MultiWorld implements CommandExecutor {
         // 复制文件夹
         try {
             FileUtils.copyDirectory(sourceMapFolder, destinationMapFolder);
-            getLogger().info("Saved map folder: " + mapFolderName);
+            getLogger().info("§eSaved map folder: " + mapFolderName);
         } catch (IOException e) {
             e.printStackTrace();
-            getLogger().warning("Failed to save map folder: " + mapFolderName);
+            getLogger().warning("§cFailed to save map folder: " + mapFolderName);
         }
     }
 
@@ -140,13 +140,13 @@ public class MultiWorld implements CommandExecutor {
         if (destinationMapFolder.exists() && destinationMapFolder.isDirectory()) {
             try {
                 FileUtils.deleteDirectory(destinationMapFolder);
-                getLogger().info("Deleted map folder: " + mapFolderName);
+                getLogger().info("§eDeleted map folder: " + mapFolderName);
             } catch (IOException e) {
                 e.printStackTrace();
-                getLogger().warning("Failed to delete map folder: " + mapFolderName);
+                getLogger().warning("§cFailed to delete map folder: " + mapFolderName);
             }
         } else {
-            getLogger().warning("Map folder not found: " + mapFolderName);
+            getLogger().warning("§cMap folder not found: " + mapFolderName);
         }
     }
     private void teleportToMap(Player player, String mapFolderName) {
@@ -161,12 +161,12 @@ public class MultiWorld implements CommandExecutor {
             World world = Bukkit.createWorld(new org.bukkit.WorldCreator(mapFolderName));
             if (world != null) {
                 player.teleport(world.getSpawnLocation());
-                player.sendMessage("You have been teleported to the map: " + mapFolderName);
+                player.sendMessage("§eYou have been teleported to the map: " + mapFolderName);
             } else {
-                player.sendMessage("Failed to teleport to map: " + mapFolderName);
+                player.sendMessage("§cFailed to teleport to map: " + mapFolderName);
             }
         } else {
-            player.sendMessage("Map not found: " + mapFolderName);
+            player.sendMessage("§cMap not found: " + mapFolderName);
         }
     }
     public static void teleportToLobby(Player player) {
@@ -187,9 +187,9 @@ public class MultiWorld implements CommandExecutor {
 
         if (world != null) {
             Bukkit.getServer().unloadWorld(world, false);
-            getLogger().info("Unloaded world: " + worldName);
+            getLogger().info("§cUnloaded world: " + worldName);
         } else {
-            getLogger().warning("World not found: " + worldName);
+            getLogger().warning("§eWorld not found: " + worldName);
         }
     }
 
