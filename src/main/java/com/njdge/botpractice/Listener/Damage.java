@@ -28,6 +28,7 @@ public class Damage implements Listener {
             Player player = (Player) event.getEntity();
             player.damage(0);
 
+
         }
     }
 
@@ -36,6 +37,9 @@ public class Damage implements Listener {
             if (e.getDamager() instanceof Player && e.getEntity() instanceof Player) {
                 final Player attacker = (Player) e.getDamager();
                 Player victim = (Player) e.getEntity();
+                victim.setMaximumNoDamageTicks(20);
+                victim.setNoDamageTicks(20);
+
 
                 if (victim.hasMetadata("NPC")) {
                     NPC npc = CitizensAPI.getNPCRegistry().getNPC(victim);
@@ -43,16 +47,16 @@ public class Damage implements Listener {
                         Location victimLocation = victim.getLocation();
                         Location attackerLocation = attacker.getLocation();
                         double knockbackStrength = 0.8D; // 擊退強度
-                        double verticalKnockback = 0.37;  // 垂直擊退
+                        double verticalKnockback = 0.35;  // 垂直擊退
                         Vector direction = victimLocation.clone().subtract(attackerLocation).toVector().normalize();
                         Vector knockbackVector = direction.multiply(knockbackStrength).setY(verticalKnockback);
 
                         if (!victim.isOnGround()) {
-                            double AirKnockbackStrength = 0.68D;
-                            double AirVerticalKnockback = 0.26;
+                            double AirKnockbackStrength = 0.55D;
+                            double AirVerticalKnockback = 0.21;
                             Vector Airdirection = victimLocation.clone().subtract(attackerLocation).toVector().normalize();
-                            Vector AirknockbackVector = direction.multiply(AirKnockbackStrength).setY(AirVerticalKnockback);
-                            victim.setVelocity(knockbackVector);
+                            Vector AirknockbackVector = Airdirection.multiply(AirKnockbackStrength).setY(AirVerticalKnockback);
+                            victim.setVelocity(AirknockbackVector);
 
                         }
 
@@ -64,24 +68,28 @@ public class Damage implements Listener {
     @EventHandler
 
     public void onPlayerDamage(EntityDamageByEntityEvent e) {
+
         if (e.getDamager() instanceof Player) {
             if (e.getEntity() instanceof Player) {
                 final Player attacker = (Player) e.getDamager();
                 Player victim = (Player) e.getEntity();
+                victim.setMaximumNoDamageTicks(20);
+                victim.setNoDamageTicks(20);
+
                 if (attacker.hasMetadata("NPC")) {
                     Location victimLocation = victim.getLocation();
                     Location attackerLocation = attacker.getLocation();
                     double knockbackStrength = 0.8D;
-                    double verticalKnockback = 0.37;
+                    double verticalKnockback = 0.35;
                     Vector direction = victimLocation.clone().subtract(attackerLocation).toVector().normalize();
                     Vector knockbackVector = direction.multiply(knockbackStrength).setY(verticalKnockback);
                     victim.setVelocity(knockbackVector);
                     if (!victim.isOnGround()) {
-                        double AirKnockbackStrength = 0.68D;
-                        double AirVerticalKnockback = 0.26;
+                        double AirKnockbackStrength = 0.55D;
+                        double AirVerticalKnockback = 0.21;
                         Vector Airdirection = victimLocation.clone().subtract(attackerLocation).toVector().normalize();
-                        Vector AirknockbackVector = direction.multiply(AirKnockbackStrength).setY(AirVerticalKnockback);
-                        victim.setVelocity(knockbackVector);
+                        Vector AirknockbackVector = Airdirection.multiply(AirKnockbackStrength).setY(AirVerticalKnockback);
+                        victim.setVelocity(AirknockbackVector);
 
                     }
                 }
