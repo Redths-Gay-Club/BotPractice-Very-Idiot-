@@ -1,5 +1,6 @@
 package com.njdge.botpractice.Listener;
 
+import com.njdge.botpractice.GameManager.GameManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -17,10 +18,13 @@ import static com.njdge.botpractice.GUI.SelMap.openGUI;
 import static com.njdge.botpractice.MultiWorld.MultiWorld.teleportToLobby;
 
 public class onPlayerJoin implements Listener {
+
+
     @EventHandler
     public void onPlayerJoinEvent(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         teleportToLobby(player);
+        GameManager.setGameState(player, GameManager.GameState.NONE);
         PlayerInventory inventory = player.getInventory();
         inventory.clear();
         ItemStack BotDuel = new ItemStack(Material.GOLD_SWORD);
@@ -28,6 +32,7 @@ public class onPlayerJoin implements Listener {
         meta.setDisplayName(ChatColor.RED + "Bot Duel");
         BotDuel.setItemMeta(meta);
         player.getInventory().addItem(BotDuel);
+
     }
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {

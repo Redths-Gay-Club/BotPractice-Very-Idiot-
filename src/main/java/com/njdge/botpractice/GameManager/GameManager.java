@@ -6,18 +6,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GameManager {
-    private Map<Player, PlayerState> playerStates = new HashMap<>();
+    public enum GameState {
+        NONE,
+        IN_GAME
+    }
+    private static Map<Player, GameState> playerGameStates = new HashMap<>();
 
-    public enum PlayerState {
-        IN_GAME,
-        NONE
+    // 設定玩家的遊戲狀態
+    public static void setGameState(Player player, GameState state) {
+        playerGameStates.put(player, state);
     }
 
-    public PlayerState getPlayerState(Player player) {
-        return playerStates.getOrDefault(player, PlayerState.NONE);
+    // 獲取玩家的遊戲狀態
+    public static GameState getGameState(Player player) {
+        return playerGameStates.getOrDefault(player, GameState.NONE);
     }
 
-    public void setPlayerState(Player player, PlayerState state) {
-        playerStates.put(player, state);
-    }
+
 }

@@ -2,15 +2,14 @@ package com.njdge.botpractice.GUI;
 
 import com.njdge.botpractice.Arena.SetArenaList;
 import com.njdge.botpractice.GameManager.BoxingManager;
+import com.njdge.botpractice.GameManager.GameManager;
 import com.njdge.botpractice.Main;
 import com.njdge.botpractice.commands.BotName;
+import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.ai.NavigatorParameters;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.trait.Equipment;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -37,6 +36,7 @@ import java.util.Map;
 
 import static com.njdge.botpractice.GameManager.BoxingManager.*;
 import static com.njdge.botpractice.MultiWorld.MultiWorld.loadMaps;
+import static com.njdge.botpractice.MultiWorld.MultiWorld.teleportToLobby;
 
 public class SelMap implements Listener {
     private static Map<Player, Boolean> playerInGame = new HashMap<>();
@@ -99,7 +99,6 @@ public class SelMap implements Listener {
         File mapFolder = new File(mapFolderPath);
 
         if (mapFolder.exists() && mapFolder.isDirectory()) {
-            // Load maps, create world, teleport player, etc.
             try {
                 loadMaps(arenaName);
                 World world = Bukkit.createWorld(new org.bukkit.WorldCreator(arenaName));
@@ -118,10 +117,10 @@ public class SelMap implements Listener {
             player.sendMessage("§cMap not found: " + arenaName);
             return;
         }
+        GameManager.setGameState(player, GameManager.GameState.IN_GAME);
 
         spawnBot(player, arenaName);
         teleportToArena(player, arenaName);
-
         player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 1));
         PlayerInventory inventory = player.getInventory();
         inventory.clear();

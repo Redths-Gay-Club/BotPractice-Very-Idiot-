@@ -2,6 +2,7 @@ package com.njdge.botpractice;
 
 import com.njdge.botpractice.GUI.SelMap;
 import com.njdge.botpractice.GameManager.BoxingManager;
+import com.njdge.botpractice.GameManager.GameManager;
 import com.njdge.botpractice.Listener.Damage;
 import com.njdge.botpractice.Listener.core;
 import com.njdge.botpractice.Listener.onPlayerJoin;
@@ -10,7 +11,10 @@ import com.njdge.botpractice.commands.*;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPCRegistry;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import static com.njdge.botpractice.GameManager.GameManager.getGameState;
 
 public final class Main extends JavaPlugin {
     public static Main instance;
@@ -36,8 +40,21 @@ public final class Main extends JavaPlugin {
         Bukkit.getPluginCommand("l").setExecutor(new L());
         Bukkit.getPluginManager().registerEvents(new onPlayerJoin(), this);
         Bukkit.getPluginCommand("botname").setExecutor(new BotName());
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, this::updateScoreboard, 0, 5);
 
+    }
 
+    public void updateScoreboard() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if(getGameState(player) == GameManager.GameState.NONE){
+                scoreboard.lobbyscoreboard(player);
+
+            }
+            if(getGameState(player) == GameManager.GameState.IN_GAME){
+                scoreboard.setupScoreboard(player);
+
+            }
+        }
     }
 
     @Override
